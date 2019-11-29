@@ -1,19 +1,16 @@
-﻿using IRunes.Models;
-using SIS.HTTP.Enums;
+﻿using SIS.HTTP.Enums;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
 using SIS.WebServer.Result;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace IRunes.App.Controllers
+namespace SIS.WebServer
 {
-    public abstract class BaseController
+    public abstract class Controller
     {
-        protected BaseController()
+        protected Controller()
         {
             this.ViewData = new Dictionary<string, object>();
         }
@@ -35,11 +32,11 @@ namespace IRunes.App.Controllers
             return request.Session.ContainsParameter("username");
         }
 
-        protected void SignIn(IHttpRequest request, User user)
+        protected void SignIn(IHttpRequest request, string id, string username, string email)
         {
-            request.Session.AddParameter("id", user.Id);
-            request.Session.AddParameter("username", user.Username);
-            request.Session.AddParameter("email", user.Email);
+            request.Session.AddParameter("id", id);
+            request.Session.AddParameter("username", username);
+            request.Session.AddParameter("email", email);
         }
 
         protected void SignOut(IHttpRequest request)

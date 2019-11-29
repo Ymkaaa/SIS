@@ -7,10 +7,12 @@ using System.Text;
 using System.Linq;
 using IRunes.Models;
 using System.Security.Cryptography;
+using SIS.WebServer;
+using SIS.WebServer.Attributes;
 
 namespace IRunes.App.Controllers
 {
-    public class UsersController : BaseController
+    public class UsersController : Controller
     {   
         private string HashPassword(string password)
         {
@@ -24,6 +26,7 @@ namespace IRunes.App.Controllers
             return this.View();
         }
 
+        [HttpPost(ActionName = "Login")]
         public IHttpResponse LoginConfirm(IHttpRequest request)
         {
             using(RunesDbContext context = new RunesDbContext())
@@ -38,7 +41,7 @@ namespace IRunes.App.Controllers
                     return this.Redirect("/Users/Login");
                 }
 
-                this.SignIn(request, userFromDb);
+                this.SignIn(request, userFromDb.Id, userFromDb.Username, userFromDb.Email);
             }
 
             return this.Redirect("/");
@@ -49,6 +52,7 @@ namespace IRunes.App.Controllers
             return this.View();
         }
 
+        [HttpPost(ActionName = "Register")]
         public IHttpResponse RegisterConfirm(IHttpRequest request)
         {
             using (RunesDbContext context = new RunesDbContext())

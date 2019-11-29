@@ -4,6 +4,8 @@ using IRunes.Models;
 using Microsoft.EntityFrameworkCore;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
+using SIS.WebServer;
+using SIS.WebServer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,12 @@ using System.Text;
 
 namespace IRunes.App.Controllers
 {
-    public class AlbumsController : BaseController
+    public class AlbumsController : Controller
     {
+        public override string ToString()
+        {
+            return base.ToString();
+        }
         public IHttpResponse All(IHttpRequest request)
         {
             if (!this.IsLoggedIn(request))
@@ -47,6 +53,7 @@ namespace IRunes.App.Controllers
             return this.View();
         }
 
+        [HttpPost(ActionName = "Create")]
         public IHttpResponse CreateConfirm(IHttpRequest request)
         {
             if (!this.IsLoggedIn(request))

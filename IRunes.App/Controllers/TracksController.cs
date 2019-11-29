@@ -3,12 +3,14 @@ using IRunes.Data;
 using IRunes.Models;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
+using SIS.WebServer;
+using SIS.WebServer.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace IRunes.App.Controllers
 {
-    public class TracksController : BaseController
+    public class TracksController : Controller
     {
         public IHttpResponse Create(IHttpRequest request)
         {
@@ -24,6 +26,7 @@ namespace IRunes.App.Controllers
             return this.View(); 
         }
 
+        [HttpPost(ActionName = "Create")]
         public IHttpResponse CreateConfirm(IHttpRequest request)
         {
             if (!this.IsLoggedIn(request))
