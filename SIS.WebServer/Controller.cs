@@ -1,12 +1,12 @@
 ﻿using SIS.HTTP.Enums;
 using SIS.HTTP.Requests.Contracts;
-using SIS.HTTP.Responses.Contracts;
-using SIS.WebServer.Result;
+using SIS.MvcFramework.Extensions;
+using SIS.MvcFramework.Identity;
+using SIS.MvcFramework.Result;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace SIS.WebServer
+namespace SIS.MvcFramework
 {
     public abstract class Controller
     {
@@ -16,6 +16,10 @@ namespace SIS.WebServer
         }
 
         protected Dictionary<string, object> ViewData;
+
+        public Principal User => this.Request.Session.ContainsParameter("principal") ? (Principal)this.Request.Session.GetParameter("principal") : null;
+
+        public IHttpRequest Request { get; set; }
 
         private string ParseTemplate(string viewContent)
         {
@@ -27,29 +31,32 @@ namespace SIS.WebServer
             return viewContent;
         }
         
-        protected bool IsLoggedIn(IHttpRequest request)
+        protected bool IsLoggedIn()
         {
-            return request.Session.ContainsParameter("username");
+            return this.Request.Session.ContainsParameter("principal");
         }
 
-        protected void SignIn(IHttpRequest request, string id, string username, string email)
+        protected void SignIn(string id, string username, string email)
         {
-            request.Session.AddParameter("id", id);
-            request.Session.AddParameter("username", username);
-            request.Session.AddParameter("email", email);
+            this.Request.Session.AddParameter("principal", new Principal()
+            {
+                Id = id,
+                Username = username,
+                Email = email
+            }); ;
         }
 
-        protected void SignOut(IHttpRequest request)
+        protected void SignOut()
         {
-            request.Session.ClearParameters();
+            this.Request.Session.ClearParameters();
         }
 
-        protected IHttpResponse View([CallerMemberName] string view = null)
+        protected ActionResult View([CallerMemberName] string view = null)
         {
             string controllerName = this.GetType().Name.Replace("Controller", string.Empty);
             string viewName = view;
 
-            string viewContent = File.ReadAllText($"Views/{controllerName}/{viewName}.html");
+            string viewContent = System.IO.File.ReadAllText($"Views/{controllerName}/{viewName}.html");
 
             viewContent = this.ParseTemplate(viewContent);
 
@@ -58,9 +65,29 @@ namespace SIS.WebServer
             return htmlResult;
         }
 
-        protected IHttpResponse Redirect(string url)
+        protected ActionResult Redirect(string url)
         {
             return new RedirectResult(url);
+        }
+
+        protected ActionResult Xml(object obj)
+        {
+            return new XmlResult(obj.ToXml());
+        }
+
+        protected ActionResult Json(object obj)
+        {
+            return new JsonResult(obj.ToJson());
+        }
+
+        protected ActionResult File(byte[] fileContent)
+        {
+            return new FileResult(fileContent);
+        }
+
+        protected ActionResult NotFound(string message)
+        {
+            return new NotFoundResult(message);
         }
     }
 }

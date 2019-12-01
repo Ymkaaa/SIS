@@ -11,11 +11,11 @@ using SIS.HTTP.Exceptions;
 using SIS.HTTP.Requests;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
-using SIS.WebServer.Result;
-using SIS.WebServer.Routing.Contracts;
-using SIS.WebServer.Sessions;
+using SIS.MvcFramework.Result;
+using SIS.MvcFramework.Routing.Contracts;
+using SIS.MvcFramework.Sessions;
 
-namespace SIS.WebServer
+namespace SIS.MvcFramework
 {
     public class ConnectionHandler
     {

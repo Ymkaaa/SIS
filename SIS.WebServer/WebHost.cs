@@ -1,5 +1,5 @@
-﻿using SIS.WebServer.Routing.Contracts;
-using SIS.WebServer.Routing;
+﻿using SIS.MvcFramework.Routing.Contracts;
+using SIS.MvcFramework.Routing;
 using SIS.WebServer.Attributes;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -8,7 +8,12 @@ using System.Linq;
 using System;
 using SIS.HTTP.Common;
 using SIS.HTTP.Enums;
-using SIS.HTTP.Responses.Contracts;
+using SIS.MvcFramework.Result;
+using SIS.MvcFramework;
+using SIS.MvcFramework.Attributes;
+using SIS.MvcFramework.Identity;
+using SIS.MvcFramework.Attributes.Security;
+using SIS.HTTP.Responses;
 
 namespace SIS.WebServer
 {
@@ -38,7 +43,8 @@ namespace SIS.WebServer
             {
                 IEnumerable<MethodInfo> actions = controller
                     .GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance)
-                    .Where(method => !method.IsSpecialName);
+                    .Where(method => !method.IsSpecialName && method.DeclaringType == controller)
+                    .Where(method => method.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (MethodInfo action in actions)
                 {
@@ -47,51 +53,48 @@ namespace SIS.WebServer
                         .Where(attribute => attribute.AttributeType.IsSubclassOf(typeof(BaseHttpAttribute)))
                         .LastOrDefault();
 
-                    if (attr == null)
+                    string url = $"/{controller.Name.Replace("Controller", string.Empty)}/{action.Name}";
+                    HttpRequestMethod method = HttpRequestMethod.Get;
+
+                    if (attr != null)
                     {
-                        string url = $"/{controller.Name.Replace("Controller", string.Empty)}/{action.Name}";
+                        List<CustomAttributeNamedArgument> actionNameArgs = attr.NamedArguments.Where(a => a.MemberName == "ActionName").ToList();
+                        List<CustomAttributeNamedArgument> urlArgs = attr.NamedArguments.Where(a => a.MemberName == "Url").ToList();
 
-                        serverRoutingTable.Add(HttpRequestMethod.Get, url, request =>
+                        if (urlArgs.Count != 0)
                         {
-                            Object controllerInstance = Activator.CreateInstance(controller);
-                            IHttpResponse response = action.Invoke(controllerInstance, new[] { request }) as IHttpResponse;
+                            url = urlArgs[0].TypedValue.Value.ToString();
+                        }
 
-                            return response;
-                        });
+                        if (actionNameArgs.Count != 0)
+                        {
+                            url = $"/{controller.Name.Replace("Controller", string.Empty)}/{actionNameArgs[0].TypedValue.Value.ToString()}";
+                        }
 
-                        Console.WriteLine($"{HttpRequestMethod.Get} - {url}");
+                        method = (HttpRequestMethod)Enum.Parse(typeof(HttpRequestMethod), Regex.Match(attr.AttributeType.Name, GlobalConstants.AttributeMethodMatchPattern).Groups["method"].Value);
                     }
-                    else
+                                        
+                    serverRoutingTable.Add(method, url, request =>
                     {
-                        CustomAttributeNamedArgument actionNameAttrs = attr.NamedArguments.Where(a => a.MemberName == "ActionName").FirstOrDefault();
-                        CustomAttributeNamedArgument urlAttrs = attr.NamedArguments.Where(a => a.MemberName == "Url").FirstOrDefault();
+                        Object controllerInstance = Activator.CreateInstance(controller);
+                        ((Controller)controllerInstance).Request = request;
 
-                        HttpRequestMethod method = (HttpRequestMethod)Enum.Parse(typeof(HttpRequestMethod), Regex.Match(attr.AttributeType.Name, GlobalConstants.AttributeMethodMatchPattern).Groups["method"].Value);
-                        string url;
+                        //Security Authorization
+                        Principal controllerPrincipal = ((Controller)controllerInstance).User;
+                        AuthorizeAttribute authorizeAttibute = action.GetCustomAttributes().LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
 
-                        if (attr.NamedArguments.Where(a => a.MemberName == "Url").ToList().Count == 0)
+                        if (authorizeAttibute != null && !authorizeAttibute.IsInAuthority(controllerPrincipal))
                         {
-                            url = $"/{controller.Name.Replace("Controller", string.Empty)}/{actionNameAttrs.TypedValue.Value.ToString()}";
+                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
                         }
-                        else
-                        {
-                            url = urlAttrs.TypedValue.Value.ToString();
-                        }
-                        
-                        serverRoutingTable.Add(method, url, request =>
-                        {
-                            Object controllerInstance = Activator.CreateInstance(controller);
-                            IHttpResponse response = action.Invoke(controllerInstance, new[] { request }) as IHttpResponse;
 
-                            return response;
-                        });
+                        ActionResult response = action.Invoke(controllerInstance, new object[0]) as ActionResult;
 
-                        Console.WriteLine($"{method} - {url}");
-                    }
+                        return response;
+                    });
 
-
+                    Console.WriteLine($"{method} - {url}");
                 }
-
             }
         }
     }
