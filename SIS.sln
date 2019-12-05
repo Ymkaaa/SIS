@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{AFF3A3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Services", "IRunes.Services\IRunes.Services.csproj", "{A7A5223C-D9A4-480D-9C5C-8482CED6C542}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.MvcFramework.Tests", "SIS.MvcFramework.Tests\SIS.MvcFramework.Tests.csproj", "{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{A7A5223C-D9A4-480D-9C5C-8482CED6C542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A5223C-D9A4-480D-9C5C-8482CED6C542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7A5223C-D9A4-480D-9C5C-8482CED6C542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

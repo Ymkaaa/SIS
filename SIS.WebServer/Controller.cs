@@ -3,6 +3,7 @@ using SIS.HTTP.Requests.Contracts;
 using SIS.MvcFramework.Extensions;
 using SIS.MvcFramework.Identity;
 using SIS.MvcFramework.Result;
+using SIS.WebServer.ViewEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -10,6 +11,8 @@ namespace SIS.MvcFramework
 {
     public abstract class Controller
     {
+        private IViewEngine viewEngine = new ViewEngine();
+
         protected Controller()
         {
             this.ViewData = new Dictionary<string, object>();
@@ -20,16 +23,6 @@ namespace SIS.MvcFramework
         public Principal User => this.Request.Session.ContainsParameter("principal") ? (Principal)this.Request.Session.GetParameter("principal") : null;
 
         public IHttpRequest Request { get; set; }
-
-        private string ParseTemplate(string viewContent)
-        {
-            foreach (KeyValuePair<string, object> param in this.ViewData)
-            {
-                viewContent = viewContent.Replace($"@Model.{param.Key}", param.Value.ToString());
-            }
-
-            return viewContent;
-        }
         
         protected bool IsLoggedIn()
         {
@@ -53,14 +46,20 @@ namespace SIS.MvcFramework
 
         protected ActionResult View([CallerMemberName] string view = null)
         {
+            return this.View<object>(null, view);
+        }
+
+        protected ActionResult View<T>(T model = null, [CallerMemberName] string view = null)
+            where T : class
+        {
             string controllerName = this.GetType().Name.Replace("Controller", string.Empty);
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText($"Views/{controllerName}/{viewName}.html");
-            viewContent = this.ParseTemplate(viewContent);
+            viewContent = this.viewEngine.Execute(viewContent, model);
 
             string layoutContent = System.IO.File.ReadAllText($"Views/_Layout.html");
-            layoutContent = ParseTemplate(layoutContent);
+            layoutContent = this.viewEngine.Execute(layoutContent, model);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             HtmlResult htmlResult = new HtmlResult(layoutContent, HttpResponseStatusCode.Ok);
