@@ -3,9 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.WebServer", "SIS.WebServer\SIS.WebServer.csproj", "{E86F049B-BDEC-4810-B162-D8AA526A3B25}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.HTTP", "SIS.HTTP\SIS.HTTP.csproj", "{B0EFD95C-2CC9-4A0D-AC00-97D65BED98DF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{398A1875-E219-420F-9189-56F546A653AA} = {398A1875-E219-420F-9189-56F546A653AA}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.App", "IRunes.App\IRunes.App.csproj", "{85F4A1ED-5C82-4E20-8E7A-612473D3BD00}"
 EndProject
@@ -19,7 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{AFF3A3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Services", "IRunes.Services\IRunes.Services.csproj", "{A7A5223C-D9A4-480D-9C5C-8482CED6C542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.MvcFramework.Tests", "SIS.MvcFramework.Tests\SIS.MvcFramework.Tests.csproj", "{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.MvcFramework.Tests", "SIS.MvcFramework.Tests\SIS.MvcFramework.Tests.csproj", "{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.MvcFramework", "SIS.MvcFramework\SIS.MvcFramework.csproj", "{69DB02D6-3E88-4793-BA48-7722A65051B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.Common", "SIS.Common\SIS.Common.csproj", "{398A1875-E219-420F-9189-56F546A653AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +32,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E86F049B-BDEC-4810-B162-D8AA526A3B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E86F049B-BDEC-4810-B162-D8AA526A3B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E86F049B-BDEC-4810-B162-D8AA526A3B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E86F049B-BDEC-4810-B162-D8AA526A3B25}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B0EFD95C-2CC9-4A0D-AC00-97D65BED98DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0EFD95C-2CC9-4A0D-AC00-97D65BED98DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0EFD95C-2CC9-4A0D-AC00-97D65BED98DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,6 +56,14 @@ Global
 		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA3B5ED-2CB3-42E7-9FC1-1D8C3A014D6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69DB02D6-3E88-4793-BA48-7722A65051B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69DB02D6-3E88-4793-BA48-7722A65051B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69DB02D6-3E88-4793-BA48-7722A65051B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69DB02D6-3E88-4793-BA48-7722A65051B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398A1875-E219-420F-9189-56F546A653AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{398A1875-E219-420F-9189-56F546A653AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{398A1875-E219-420F-9189-56F546A653AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{398A1875-E219-420F-9189-56F546A653AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

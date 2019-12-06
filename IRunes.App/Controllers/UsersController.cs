@@ -7,6 +7,7 @@ using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes;
 using SIS.MvcFramework.Result;
 using IRunes.Services;
+using SIS.MvcFramework.Attributes.Http;
 
 namespace IRunes.App.Controllers
 {

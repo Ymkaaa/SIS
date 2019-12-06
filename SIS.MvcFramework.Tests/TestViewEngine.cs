@@ -1,4 +1,4 @@
-using SIS.WebServer.ViewEngine;
+using SIS.MvcFramework.ViewEngineX;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
