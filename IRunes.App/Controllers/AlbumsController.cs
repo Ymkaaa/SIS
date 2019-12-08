@@ -1,9 +1,10 @@
-﻿using IRunes.App.Extensions;
+﻿using IRunes.App.ViewModels.Albums;
 using IRunes.Models;
 using IRunes.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
+using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +24,7 @@ namespace IRunes.App.Controllers
         public ActionResult All()
         {
             ICollection<Album> albums = albumService.GetAllAlbums();
-
-            if (albums.Count == 0)
-            {
-                this.ViewData["Albums"] = "There are currently no albums.";
-            }
-            else
-            {
-                this.ViewData["Albums"] = string.Join(string.Empty, albums.Select(a => a.ToHtmlAll()).ToList());
-            }
-
-            return this.View();
+            return this.View(albums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
         }
 
         [Authorize]
@@ -73,9 +64,7 @@ namespace IRunes.App.Controllers
                 return this.Redirect("/Albums/All");
             }
 
-            this.ViewData["Album"] = albumFromDb.ToHtmlDetails();
-
-            return this.View();
+            return this.View(ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb));
         }
     }
 }

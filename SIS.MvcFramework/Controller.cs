@@ -11,14 +11,12 @@ namespace SIS.MvcFramework
 {
     public abstract class Controller
     {
-        private readonly IViewEngine viewEngine = new ViewEngine();
+        private readonly IViewEngine viewEngine;
 
         protected Controller()
         {
-            this.ViewData = new Dictionary<string, object>();
+            this.viewEngine = new ViewEngine();
         }
-
-        protected Dictionary<string, object> ViewData;
 
         public Principal User => this.Request.Session.ContainsParameter("principal") ? (Principal)this.Request.Session.GetParameter("principal") : null;
 
@@ -56,10 +54,10 @@ namespace SIS.MvcFramework
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText($"Views/{controllerName}/{viewName}.html");
-            viewContent = this.viewEngine.Execute(viewContent, model);
+            viewContent = this.viewEngine.Execute(viewContent, model, this.User);
 
             string layoutContent = System.IO.File.ReadAllText($"Views/_Layout.html");
-            layoutContent = this.viewEngine.Execute(layoutContent, model);
+            layoutContent = this.viewEngine.Execute(layoutContent, model, this.User);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             HtmlResult htmlResult = new HtmlResult(layoutContent, HttpResponseStatusCode.Ok);

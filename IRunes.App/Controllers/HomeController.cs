@@ -1,7 +1,7 @@
-﻿using SIS.MvcFramework;
-using SIS.MvcFramework.Attributes;
+﻿using IRunes.App.ViewModels.Home;
+using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
-using SIS.MvcFramework.Attributes.Security;
+using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
 
 namespace IRunes.App.Controllers
@@ -18,9 +18,7 @@ namespace IRunes.App.Controllers
         {
             if (this.IsLoggedIn())
             {
-                this.ViewData["Username"] = this.User.Username;
-
-                return this.View("Home");
+                return this.View(ModelMapper.ProjectTo<UserHomeViewModel>(this.User), "Home");
             }
 
             return this.View();

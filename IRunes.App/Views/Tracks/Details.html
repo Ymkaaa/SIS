@@ -1,25 +1,15 @@
-﻿<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <a class="navbar-brand" href="#">IRunes</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Albums/All">Albums</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Users/Logout">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-<hr class="bg-success" style="height: 2px" />
+﻿<hr class="bg-success" style="height: 2px" />
 <main>
-    @Model.Track
+    <div class="track-details">
+        <h4 class="text-center">Track Name: @WebUtility.UrlDecode(Model.Name)</h4>
+        <h4 class="text-center">Track Price: @Model.Price</h4>
+        <hr class="bg-success w-50" style="height: 2px" />
+        <div class="d-flex justify-content-center">
+            <iframe src="@WebUtility.UrlDecode(Model.Link)" class="w-50 mx-auto" height="480"></iframe>
+        </div>
+        <hr class="bg-success w-50" style="height: 2px" />
+        <div class="d-flex justify-content-center">
+            <a class="btn bg-success text-white" href="/Albums/Details?id=@Model.AlbumId">Back To Album</a>
+        </div>
+    </div>
 </main>
