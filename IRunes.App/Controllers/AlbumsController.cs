@@ -35,12 +35,12 @@ namespace IRunes.App.Controllers
 
         [Authorize]
         [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm(string name, string cover)
+        public ActionResult CreateConfirm(CreateInputModel model)
         {
             Album album = new Album()
             {
-                Name = name,
-                Cover = cover,
+                Name = model.Name,
+                Cover = model.Cover,
                 Price = 0M
             };
 
@@ -50,9 +50,9 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Details(string id)
+        public ActionResult Details(DetailsInputModel model)
         {
-            Album albumFromDb = albumService.GetAlbumById(id);
+            Album albumFromDb = albumService.GetAlbumById(model.Id);
 
             if (albumFromDb == null)
             {

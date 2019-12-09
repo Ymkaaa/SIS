@@ -5,6 +5,7 @@ using SIS.MvcFramework;
 using SIS.MvcFramework.Result;
 using IRunes.Services;
 using SIS.MvcFramework.Attributes.Http;
+using IRunes.App.ViewModels.Users;
 
 namespace IRunes.App.Controllers
 {
@@ -30,9 +31,9 @@ namespace IRunes.App.Controllers
         }
 
         [HttpPost(ActionName = "Login")]
-        public ActionResult LoginConfirm(string username, string password)
+        public ActionResult LoginConfirm(LoginInputModel model)
         {
-            User userFromDb = this.userService.GetUserByUsernameAndPassword(username, this.HashPassword(password));
+            User userFromDb = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
             if (userFromDb == null)
             {
@@ -50,18 +51,18 @@ namespace IRunes.App.Controllers
         }
 
         [HttpPost(ActionName = "Register")]
-        public ActionResult RegisterConfirm(string username, string password, string confirmPassword, string email)
+        public ActionResult RegisterConfirm(RegisterInputModel model)
         {
-            if (password != confirmPassword)
+            if (model.Password != model.ConfirmPassword)
             {
                 return this.Redirect("/Users/Register");
             }
 
             User user = new User()
             {
-                Username = username,
-                Password = this.HashPassword(password),
-                Email = email
+                Username = model.Username,
+                Password = this.HashPassword(model.Password),
+                Email = model.Email
             };
 
             this.userService.CreateUser(user);

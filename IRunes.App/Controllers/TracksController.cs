@@ -30,35 +30,35 @@ namespace IRunes.App.Controllers
 
         [HttpPost(ActionName = "Create")]
         [Authorize]
-        public ActionResult CreateConfirm(string albumId, string name, string link, decimal price)
+        public ActionResult CreateConfirm(CreateInputModel model)
         {
             Track track = new Track()
             {
-                Name = name,
-                Link = link,
-                Price = price
+                Name = model.Name,
+                Link = model.Link,
+                Price = model.Price
             };
 
-            if (!this.albumService.AddTrackToAlbum(albumId, track))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, track))
             {
                 return this.Redirect("/Albums/All");
             }
 
-            return this.Redirect($"/Albums/Details?id={albumId}");
+            return this.Redirect($"/Albums/Details?id={model.AlbumId}");
         }
 
         [Authorize]
-        public ActionResult Details(string albumId, string trackId)
+        public ActionResult Details(DetailsInputModel model)
         {
-            Track trackFromDb = this.trackService.GetTrackById(trackId);
+            Track trackFromDb = this.trackService.GetTrackById(model.TrackId);
 
             if (trackFromDb == null)
             {
-                return this.Redirect($"/Albums/Details?{trackId}");
+                return this.Redirect($"/Albums/Details?{model.TrackId}");
             }
 
             TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
-            trackDetailsViewModel.AlbumId = albumId;
+            trackDetailsViewModel.AlbumId = model.AlbumId;
 
             return this.View(trackDetailsViewModel);
         }
