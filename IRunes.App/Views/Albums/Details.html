@@ -2,8 +2,8 @@
 <main>
     <div class="album-details d-flex justify-content-between row">
         <div class="album-data col-md-4">
-            <img src="@WebUtility.UrlDecode(Model.Cover)" class="img-thumbnail" />
-            <h1 class="text-center">Album Name: @WebUtility.UrlDecode(Model.Name)</h1>
+            <img src="@Model.Cover" class="img-thumbnail" />
+            <h1 class="text-center">Album Name: @Model.Name</h1>
             <h1 class="text-center">Album Price: @Model.Price</h1>
             <div class="d-flex justify-content-between">
                 <a class="btn bg-success text-white" href="/Tracks/Create?albumId=@Model.Id">Create Track</a>
@@ -23,7 +23,7 @@
                         @for(int i = 0; i < Model.Tracks.ToList().Count; i++)
                         {
                         <li>
-                            <strong>@(i+1)</strong>. <a href="/Tracks/Details?albumId=@Model.Id&trackId=@Model.Tracks[i].Id">@WebUtility.UrlDecode(Model.Tracks[i].Name)</a>
+                            <strong>@(i+1)</strong>. <a href="/Tracks/Details?albumId=@Model.Id&trackId=@Model.Tracks[i].Id">@Model.Tracks[i].Name</a>
                         </li>
                         }
                     }

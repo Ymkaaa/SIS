@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using SIS.HTTP.Common;
 using SIS.HTTP.Cookies;
 using SIS.HTTP.Cookies.Contracts;
@@ -40,7 +41,7 @@ namespace SIS.HTTP.Requests
         public IHttpCookieCollection Cookies { get; }
 
         public HttpRequestMethod RequestMethod { get; private set; }
-        
+
         public IHttpSession Session { get; set; }
 
         private bool IsValidRequestLine(string[] requestLineParams)
@@ -121,14 +122,12 @@ namespace SIS.HTTP.Requests
 
                 foreach (string[] parameter in parameters)
                 {
-                    if (this.QueryData.ContainsKey(parameter[0]))
+                    if (!this.QueryData.ContainsKey(parameter[0]))
                     {
-                        this.QueryData[parameter[0]].Add(parameter[1]);
+                        this.QueryData.Add(parameter[0], new HashSet<string>());
                     }
-                    else
-                    {
-                        this.QueryData.Add(parameter[0], new HashSet<string> { parameter[1] });
-                    }
+
+                    this.QueryData[parameter[0]].Add(WebUtility.UrlDecode(parameter[1]));
                 }
             }
         }
@@ -153,8 +152,8 @@ namespace SIS.HTTP.Requests
                         this.FormData.Add(key, new HashSet<string>());
                     }
 
-                    ((ISet<string>)this.FormData[key]).Add(value);
-                }                
+                    (this.FormData[key]).Add(WebUtility.UrlDecode(value));
+                }
             }
         }
 
