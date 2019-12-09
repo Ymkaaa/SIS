@@ -15,6 +15,8 @@ using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Sessions;
 using SIS.MvcFramework.DependencyContainer;
 using SIS.MvcFramework.Logging;
+using SIS.HTTP.Responses.Contracts;
+using SIS.HTTP.Requests.Contracts;
 
 namespace SIS.MvcFramework
 {
@@ -79,29 +81,54 @@ namespace SIS.MvcFramework
 
                         method = (HttpRequestMethod)System.Enum.Parse(typeof(HttpRequestMethod), Regex.Match(attr.AttributeType.Name, GlobalConstants.AttributeMethodMatchPattern).Groups["method"].Value);
                     }
-                                        
-                    serverRoutingTable.Add(method, url, request =>
-                    {
-                        Controller controllerInstance = serviceProvider.CreateInstance(controller) as Controller;
-                        controllerInstance.Request = request;
 
-                        //Security Authorization
-                        Principal controllerPrincipal = controllerInstance.User;
-                        AuthorizeAttribute authorizeAttibute = action.GetCustomAttributes().LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
-
-                        if (authorizeAttibute != null && !authorizeAttibute.IsInAuthority(controllerPrincipal))
-                        {
-                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
-                        }
-
-                        ActionResult response = action.Invoke(controllerInstance, new object[0]) as ActionResult;
-
-                        return response;
-                    });
+                    serverRoutingTable.Add(method, url, (request) => ProcessRequest(serviceProvider, controller, action, request));
 
                     System.Console.WriteLine($"{method} - {url}");
                 }
             }
+        }
+
+        private static IHttpResponse ProcessRequest(IServiceProvider serviceProvider, System.Type controller, MethodInfo action, IHttpRequest request)
+        {
+            Controller controllerInstance = serviceProvider.CreateInstance(controller) as Controller;
+            controllerInstance.Request = request;
+
+            //Security Authorization
+            Principal controllerPrincipal = controllerInstance.User;
+            AuthorizeAttribute authorizeAttibute = action.GetCustomAttributes().LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+
+            if (authorizeAttibute != null && !authorizeAttibute.IsInAuthority(controllerPrincipal))
+            {
+                return new HttpResponse(HttpResponseStatusCode.Forbidden);
+            }
+
+            ParameterInfo[] parameters = action.GetParameters();
+            List<object> parameterValues = new List<object>();
+
+            foreach (ParameterInfo parameter in parameters)
+            {
+                //string parameterName = parameter.Name.ToLower();
+                //ISet<string> httpDataValue =  null;
+
+                //if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
+                //{
+                //    parameterValue = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
+                //}
+
+                //if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
+                //{
+                //    parameterValue = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
+                //}
+
+
+
+
+            }
+
+            ActionResult response = action.Invoke(controllerInstance, parameterValues.ToArray()) as ActionResult;
+
+            return response;
         }
     }
 }

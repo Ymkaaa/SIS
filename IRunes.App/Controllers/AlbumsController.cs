@@ -55,7 +55,7 @@ namespace IRunes.App.Controllers
         [Authorize]
         public ActionResult Details()
         {
-            string albumId = this.Request.QueryData["id"].ToString();
+            string albumId = this.Request.QueryData["id"].FirstOrDefault();
 
             Album albumFromDb = albumService.GetAlbumById(albumId);
 
