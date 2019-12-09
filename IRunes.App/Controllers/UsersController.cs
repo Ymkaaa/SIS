@@ -4,7 +4,6 @@ using System.Linq;
 using IRunes.Models;
 using System.Security.Cryptography;
 using SIS.MvcFramework;
-using SIS.MvcFramework.Attributes;
 using SIS.MvcFramework.Result;
 using IRunes.Services;
 using SIS.MvcFramework.Attributes.Http;
@@ -15,9 +14,9 @@ namespace IRunes.App.Controllers
     {
         private readonly IUserService userService;
 
-        public UsersController()
+        public UsersController(IUserService userService)
         {
-            this.userService = new UserService();
+            this.userService = userService;
         }
 
         private string HashPassword(string password)

@@ -16,10 +16,10 @@ namespace IRunes.App.Controllers
         private readonly IAlbumService albumService;
         private readonly ITrackService trackService;
 
-        public TracksController()
+        public TracksController(IAlbumService albumService, ITrackService trackService)
         {
-            this.albumService = new AlbumService();
-            this.trackService = new TrackService();
+            this.albumService = albumService;
+            this.trackService = trackService;
         }
 
         [Authorize]

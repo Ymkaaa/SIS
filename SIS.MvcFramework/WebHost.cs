@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using System;
 using SIS.HTTP.Common;
 using SIS.HTTP.Enums;
 using SIS.MvcFramework.Result;
@@ -14,6 +13,8 @@ using SIS.HTTP.Responses;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Sessions;
+using SIS.MvcFramework.DependencyContainer;
+using SIS.MvcFramework.Logging;
 
 namespace SIS.MvcFramework
 {
@@ -23,24 +24,28 @@ namespace SIS.MvcFramework
         {
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
             IHttpSessionStorage sessionStorage = new HttpSessionStorage();
-            AutoRegisterRoutes(application, serverRoutingTable);
+            IServiceProvider serviceProvider = new ServiceProvider();
 
-            application.ConfigureServices();
+            serviceProvider.Add<ILogger, ConsoleLogger>();
+
+            AutoRegisterRoutes(application, serverRoutingTable, serviceProvider);
+
+            application.ConfigureServices(serviceProvider);
             application.Configure(serverRoutingTable);
 
             Server server = new Server(8000, serverRoutingTable, sessionStorage);
             server.Run();
         }
 
-        private static void AutoRegisterRoutes(IMvcApplication application, IServerRoutingTable serverRoutingTable)
+        private static void AutoRegisterRoutes(IMvcApplication application, IServerRoutingTable serverRoutingTable, IServiceProvider serviceProvider)
         {
-            IEnumerable<Type> controllers = application
+            IEnumerable<System.Type> controllers = application
                 .GetType()
                 .Assembly
                 .GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Controller)));
 
-            foreach (Type controller in controllers)
+            foreach (System.Type controller in controllers)
             {
                 IEnumerable<MethodInfo> actions = controller
                     .GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance)
@@ -72,16 +77,16 @@ namespace SIS.MvcFramework
                             url = $"/{controller.Name.Replace("Controller", string.Empty)}/{actionNameArgs[0].TypedValue.Value.ToString()}";
                         }
 
-                        method = (HttpRequestMethod)Enum.Parse(typeof(HttpRequestMethod), Regex.Match(attr.AttributeType.Name, GlobalConstants.AttributeMethodMatchPattern).Groups["method"].Value);
+                        method = (HttpRequestMethod)System.Enum.Parse(typeof(HttpRequestMethod), Regex.Match(attr.AttributeType.Name, GlobalConstants.AttributeMethodMatchPattern).Groups["method"].Value);
                     }
                                         
                     serverRoutingTable.Add(method, url, request =>
                     {
-                        Object controllerInstance = Activator.CreateInstance(controller);
-                        ((Controller)controllerInstance).Request = request;
+                        Controller controllerInstance = serviceProvider.CreateInstance(controller) as Controller;
+                        controllerInstance.Request = request;
 
                         //Security Authorization
-                        Principal controllerPrincipal = ((Controller)controllerInstance).User;
+                        Principal controllerPrincipal = controllerInstance.User;
                         AuthorizeAttribute authorizeAttibute = action.GetCustomAttributes().LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
 
                         if (authorizeAttibute != null && !authorizeAttibute.IsInAuthority(controllerPrincipal))
@@ -94,7 +99,7 @@ namespace SIS.MvcFramework
                         return response;
                     });
 
-                    Console.WriteLine($"{method} - {url}");
+                    System.Console.WriteLine($"{method} - {url}");
                 }
             }
         }
