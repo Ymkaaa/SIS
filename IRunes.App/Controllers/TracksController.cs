@@ -6,8 +6,6 @@ using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
 using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IRunes.App.Controllers
 {
@@ -23,22 +21,17 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(string albumId)
         {
-            Album album = this.albumService.GetAlbumById(this.Request.QueryData["albumId"].FirstOrDefault());
+            Album album = this.albumService.GetAlbumById(albumId);
 
             return this.View(ModelMapper.ProjectTo<TrackCreateViewModel>(album), "Create");
         }
 
         [HttpPost(ActionName = "Create")]
         [Authorize]
-        public ActionResult CreateConfirm()
+        public ActionResult CreateConfirm(string albumId, string name, string link, decimal price)
         {
-            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
-            string name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            string link = ((ISet<string>)this.Request.FormData["link"]).FirstOrDefault();
-            decimal price = decimal.Parse(((ISet<string>)this.Request.FormData["price"]).FirstOrDefault());
-
             Track track = new Track()
             {
                 Name = name,
@@ -55,11 +48,8 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Details()
+        public ActionResult Details(string albumId, string trackId)
         {
-            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
-            string trackId = this.Request.QueryData["trackId"].FirstOrDefault();
-
             Track trackFromDb = this.trackService.GetTrackById(trackId);
 
             if (trackFromDb == null)
