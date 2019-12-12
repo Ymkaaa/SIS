@@ -1,7 +1,5 @@
-﻿using IRunes.App.ViewModels.Home;
-using SIS.MvcFramework;
+﻿using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
-using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
 
 namespace IRunes.App.Controllers
@@ -16,11 +14,6 @@ namespace IRunes.App.Controllers
 
         public ActionResult Index()
         {
-            if (this.IsLoggedIn())
-            {
-                return this.View(ModelMapper.ProjectTo<UserHomeViewModel>(this.User), "Home");
-            }
-
             return this.View();
         }
     }

@@ -37,14 +37,16 @@ namespace SIS.MvcFramework.Mapping
 
             object originPropertyValue = originProperty.GetValue(origin);
 
-            if (destinationProperty.PropertyType == typeof(string) || destinationProperty.PropertyType == typeof(decimal))
+            if (destinationProperty.PropertyType == typeof(string) || destinationProperty.PropertyType == typeof(decimal) || destinationProperty.PropertyType.IsPrimitive) // Support only string, decimal and primitive types
             {
-                destinationProperty.SetValue(destinationInstance, originProperty.GetValue(origin));
+                if (originProperty.PropertyType == destinationProperty.PropertyType) // Support only map to equal types
+                {
+                    destinationProperty.SetValue(destinationInstance, originPropertyValue);
+                }
             }
-            else if (destinationProperty.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+            else if (destinationProperty.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))) // Support IEnumerable collections
             {
-
-                IEnumerable originCollection = (IEnumerable)originProperty.GetValue(origin);
+                IEnumerable originCollection = (IEnumerable) originPropertyValue;
                 IList destinationCollection = (IList)Activator.CreateInstance(destinationProperty.PropertyType);
 
                 Type destinationElementType = destinationProperty.GetValue(destinationInstance).GetType().GetGenericArguments()[0];
@@ -56,10 +58,9 @@ namespace SIS.MvcFramework.Mapping
 
                 destinationProperty.SetValue(destinationInstance, destinationCollection);
             }
-            else
+            else // Support objects (Recursive)
             {
-                // Not tested.
-                object value = MapObject(originProperty.GetValue(origin), destinationProperty.GetValue(destinationInstance).GetType());
+                object value = MapObject(originProperty.GetValue(origin), destinationProperty.PropertyType);
 
                 destinationProperty.SetValue(destinationInstance, value);
             }
