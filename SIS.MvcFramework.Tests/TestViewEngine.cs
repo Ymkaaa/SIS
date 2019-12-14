@@ -1,3 +1,4 @@
+using SIS.MvcFramework.Validation;
 using SIS.MvcFramework.ViewEngineX;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace SIS.MvcFramework.Tests
             {
                 StringValue = "str",
                 ListValues = new List<string> { "123", "val1", string.Empty }
-            });
+            }, new ModelStateDictionary());
             string expectedOutput = File.ReadAllText(expectedResultFileName);
 
             Assert.Equal(expectedOutput.TrimEnd(), actualOutput.TrimEnd());
@@ -42,7 +43,7 @@ namespace SIS.MvcFramework.Tests
 
             string viewContent = File.ReadAllText(viewFileName);
 
-            string actualOutput = viewEngine.Execute<object>(viewContent, null);
+            string actualOutput = viewEngine.Execute<object>(viewContent, null, new ModelStateDictionary());
             string expectedOutput = File.ReadAllText(expectedResultFileName);
 
             Assert.Equal(expectedOutput.TrimEnd(), actualOutput.TrimEnd());

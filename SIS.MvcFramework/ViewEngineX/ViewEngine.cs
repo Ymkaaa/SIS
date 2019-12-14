@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System.Collections;
 using SIS.MvcFramework.Identity;
+using SIS.MvcFramework.Validation;
+using System.Collections.Generic;
 
 namespace SIS.MvcFramework.ViewEngineX
 {
@@ -24,9 +26,11 @@ namespace SIS.MvcFramework.ViewEngineX
             return model.GetType().FullName;
         }
 
-        public string Execute<T>(string viewContent, T model, Principal user = null)
+        public string Execute<T>(string viewContent, T model, ModelStateDictionary modelState, Principal user = null)
         {
-            string csharpHtmlCode = this.GetCSharpCode(viewContent);
+            string csharpHtmlCode = string.Empty;
+            csharpHtmlCode = this.CheckForWidgets(viewContent);
+            csharpHtmlCode = this.GetCSharpCode(csharpHtmlCode);
             string code = $@"
             using System;
             using System.Linq;
@@ -35,14 +39,16 @@ namespace SIS.MvcFramework.ViewEngineX
             using SIS.MvcFramework.ViewEngineX;
             using System.Net;
             using SIS.MvcFramework.Identity;
+            using SIS.MvcFramework.Validation;
 
             namespace AppViewCodeNamespace
             {{
                 public class AppViewCode : IView
                 {{
-                    public string GetHtml(object model, Principal user)
+                    public string GetHtml(object model, ModelStateDictionary modelState, Principal user)
                     {{
                         var Model = {(model == null ? "new {}" : $"model as {GetModelType(model)}")};
+                        var ModelState = modelState;
                         var User = user;
 
                         StringBuilder html = new StringBuilder();
@@ -56,7 +62,7 @@ namespace SIS.MvcFramework.ViewEngineX
             ";
 
             IView view = CompileAndInstance(code, model?.GetType().Assembly);
-            string htmlResult = view?.GetHtml(model, user);
+            string htmlResult = view?.GetHtml(model, modelState, user);
 
             return htmlResult;
         }
@@ -160,71 +166,6 @@ namespace SIS.MvcFramework.ViewEngineX
             return csharpCode.ToString();
         }
 
-        //private string GetCSharpCode(string viewContent)
-        //{
-        //    StringBuilder cSharpCode = new StringBuilder();
-        //    string[] lines = viewContent.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-        //    string[] supportedOperators = new[] { "for", "if", "else" };
-
-        //    foreach (string line in lines)
-        //    {
-        //        string cSharpLine = string.Empty;
-
-        //        if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
-        //        {
-        //            cSharpLine = line;
-        //        }
-        //        else if (supportedOperators.Any(x => line.TrimStart().StartsWith($"@{x}")))
-        //        {
-        //            int atSignIndex = line.IndexOf("@");
-        //            cSharpLine = line.Remove(atSignIndex, 1);
-        //        }
-        //        else
-        //        {
-        //            if (!line.Contains("@"))
-        //            {
-        //                cSharpLine = $"html.AppendLine(@\"{line.Replace("\"", "\"\"")}\");";
-        //            }
-        //            else if (line.Contains("@RenderBody()"))
-        //            {
-        //                cSharpLine = $"html.AppendLine(@\"{line}\");";
-        //            }
-        //            else
-        //            {
-        //                string cSharpStringToAppend = "html.AppendLine(@\"";
-        //                string restOfLine = line;
-
-        //                while (restOfLine.Contains("@"))
-        //                {
-        //                    int atSignIndex = restOfLine.IndexOf("@");
-        //                    string plainText = restOfLine.Substring(0, atSignIndex);
-
-        //                    Regex cSharpCodeRegex = new Regex(@"[^\s<\""]+", RegexOptions.Compiled);
-        //                    string cSharpExpression = cSharpCodeRegex.Match(restOfLine.Substring(atSignIndex + 1))?.Value;
-
-        //                    cSharpStringToAppend += plainText.Replace("\"", "\"\"") + "\" + " + cSharpExpression + " + @\"";
-
-        //                    if (restOfLine.Length <= atSignIndex + cSharpExpression.Length + 1)
-        //                    {
-        //                        restOfLine = string.Empty;
-        //                    }
-        //                    else
-        //                    {
-        //                        restOfLine = restOfLine.Substring(atSignIndex + cSharpExpression.Length + 1);
-        //                    }
-        //                }
-
-        //                cSharpStringToAppend += $"{restOfLine}\");";
-        //                cSharpLine = cSharpStringToAppend;
-        //            }
-        //        }
-
-        //        cSharpCode.AppendLine(cSharpLine);
-        //    }
-
-        //    return cSharpCode.ToString();
-        //}
-
         private IView CompileAndInstance(string code, Assembly modelAssembly)
         {
             modelAssembly = modelAssembly ?? Assembly.GetEntryAssembly();
@@ -279,6 +220,30 @@ namespace SIS.MvcFramework.ViewEngineX
 
                 return instance as IView;
             }
+        }
+
+        private string CheckForWidgets(string viewContent)
+        {
+            List<IViewWidget> widgets = Assembly
+                .GetEntryAssembly()?
+                .GetTypes()
+                .Where(type => typeof(IViewWidget).IsAssignableFrom(type))
+                .Select(x => (IViewWidget)Activator.CreateInstance(x))
+                .ToList();
+
+            if (widgets == null || widgets.Count == 0)
+            {
+                return viewContent;
+            }
+
+            string widgetPrefix = "@Widgets.";
+
+            foreach (IViewWidget widget in widgets)
+            {
+                viewContent = viewContent.Replace($"{widgetPrefix}{widget.GetType().Name}", widget.Render());
+            }
+
+            return viewContent;
         }
     }
 }

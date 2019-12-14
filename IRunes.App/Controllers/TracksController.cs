@@ -32,6 +32,11 @@ namespace IRunes.App.Controllers
         [Authorize]
         public ActionResult CreateConfirm(CreateInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.Redirect("/");
+            }
+
             Track track = new Track()
             {
                 Name = model.Name,

@@ -44,7 +44,7 @@ namespace SIS.MvcFramework.Mapping
                     destinationProperty.SetValue(destinationInstance, originPropertyValue);
                 }
             }
-            else if (destinationProperty.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))) // Support IEnumerable collections
+            else if (destinationProperty.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))) // Support IEnumerable collections (Recursive)
             {
                 IEnumerable originCollection = (IEnumerable) originPropertyValue;
                 IList destinationCollection = (IList)Activator.CreateInstance(destinationProperty.PropertyType);

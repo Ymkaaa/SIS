@@ -37,6 +37,11 @@ namespace IRunes.App.Controllers
         [HttpPost(ActionName = "Create")]
         public ActionResult CreateConfirm(CreateInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.Redirect("/Albums/Create");
+            }
+
             Album album = new Album()
             {
                 Name = model.Name,

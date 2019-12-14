@@ -53,6 +53,11 @@ namespace IRunes.App.Controllers
         [HttpPost(ActionName = "Register")]
         public ActionResult RegisterConfirm(RegisterInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.Redirect("/Users/Register");
+            }
+
             if (model.Password != model.ConfirmPassword)
             {
                 return this.Redirect("/Users/Register");

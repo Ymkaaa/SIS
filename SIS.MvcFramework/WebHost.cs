@@ -17,11 +17,15 @@ using SIS.MvcFramework.DependencyContainer;
 using SIS.MvcFramework.Logging;
 using SIS.HTTP.Responses.Contracts;
 using SIS.HTTP.Requests.Contracts;
+using SIS.MvcFramework.Validation;
+using SIS.MvcFramework.Attributes.Validation;
 
 namespace SIS.MvcFramework
 {
     public static class WebHost
     {
+        private static readonly IControllerState controllerState = new ControllerState();
+
         public static void Start(IMvcApplication application)
         {
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
@@ -92,6 +96,7 @@ namespace SIS.MvcFramework
         private static IHttpResponse ProcessRequest(IServiceProvider serviceProvider, System.Type controller, MethodInfo action, IHttpRequest request)
         {
             Controller controllerInstance = serviceProvider.CreateInstance(controller) as Controller;
+            controllerState.SetState(controllerInstance);
             controllerInstance.Request = request;
 
             //Security Authorization
@@ -138,6 +143,13 @@ namespace SIS.MvcFramework
                         property.SetMethod.Invoke(parameterValue, new object[] { propertyValue });
                     }
 
+                    if (request.RequestMethod == HttpRequestMethod.Post || request.RequestMethod == HttpRequestMethod.Put)
+                    {
+                        controllerState.Reset();
+                        controllerInstance.ModelState = ValidateObject(parameterValue);
+                        controllerState.Initialize(controllerInstance);
+                    }
+
                     parameterValues.Add(parameterValue);
                 }
 
@@ -163,6 +175,33 @@ namespace SIS.MvcFramework
             }
 
             return httpDataValue;
+        }
+
+        private static ModelStateDictionary ValidateObject(object obj)
+        {
+            ModelStateDictionary modelState = new ModelStateDictionary();
+
+            PropertyInfo[] objProperties = obj.GetType().GetProperties();
+
+            foreach (PropertyInfo property in objProperties)
+            {
+                List<ValidationAttribute> validationAttributes = property
+                    .GetCustomAttributes()
+                    .Where(type => type is ValidationAttribute)
+                    .Cast<ValidationAttribute>()
+                    .ToList();
+
+                foreach (ValidationAttribute validationAttribute in validationAttributes)
+                {
+                    if (!validationAttribute.IsValid(property.GetValue(obj)))
+                    {
+                        modelState.IsValid = false;
+                        modelState.Add(property.Name, validationAttribute.ErrorMessage);
+                    }
+                }
+            }
+
+            return modelState;
         }
     }
 }

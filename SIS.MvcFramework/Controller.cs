@@ -3,6 +3,7 @@ using SIS.HTTP.Requests.Contracts;
 using SIS.MvcFramework.Extensions;
 using SIS.MvcFramework.Identity;
 using SIS.MvcFramework.Result;
+using SIS.MvcFramework.Validation;
 using SIS.MvcFramework.ViewEngineX;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -16,11 +17,14 @@ namespace SIS.MvcFramework
         protected Controller()
         {
             this.viewEngine = new ViewEngine();
+            this.ModelState = new ModelStateDictionary();
         }
 
         public Principal User => this.Request.Session.ContainsParameter("principal") ? (Principal)this.Request.Session.GetParameter("principal") : null;
 
         public IHttpRequest Request { get; set; }
+
+        public ModelStateDictionary ModelState { get; set; }
         
         protected bool IsLoggedIn()
         {
@@ -54,10 +58,10 @@ namespace SIS.MvcFramework
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText($"Views/{controllerName}/{viewName}.html");
-            viewContent = this.viewEngine.Execute(viewContent, model, this.User);
+            viewContent = this.viewEngine.Execute(viewContent, model, this.ModelState, this.User);
 
             string layoutContent = System.IO.File.ReadAllText($"Views/_Layout.html");
-            layoutContent = this.viewEngine.Execute(layoutContent, model, this.User);
+            layoutContent = this.viewEngine.Execute(layoutContent, model, this.ModelState, this.User);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             HtmlResult htmlResult = new HtmlResult(layoutContent, HttpResponseStatusCode.Ok);
