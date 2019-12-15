@@ -1,6 +1,6 @@
 ﻿namespace IRunes.App.ViewModels.Tracks
 {
-    public class DetailsInputModel
+    public class TrackDetailsInputModel
     {
         public string AlbumId { get; set; }
 

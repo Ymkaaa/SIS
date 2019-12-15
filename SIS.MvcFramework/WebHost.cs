@@ -143,7 +143,7 @@ namespace SIS.MvcFramework
                         property.SetMethod.Invoke(parameterValue, new object[] { propertyValue });
                     }
 
-                    if (request.RequestMethod == HttpRequestMethod.Post || request.RequestMethod == HttpRequestMethod.Put)
+                    if (request.RequestMethod != HttpRequestMethod.Get)
                     {
                         controllerState.Reset();
                         controllerInstance.ModelState = ValidateObject(parameterValue);

@@ -21,7 +21,7 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Create(string albumId)
+        public IActionResult Create(string albumId)
         {
             Album album = this.albumService.GetAlbumById(albumId);
 
@@ -30,7 +30,7 @@ namespace IRunes.App.Controllers
 
         [HttpPost(ActionName = "Create")]
         [Authorize]
-        public ActionResult CreateConfirm(CreateInputModel model)
+        public IActionResult CreateConfirm(TrackCreateInputModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Details(DetailsInputModel model)
+        public IActionResult Details(TrackDetailsInputModel model)
         {
             Track trackFromDb = this.trackService.GetTrackById(model.TrackId);
 

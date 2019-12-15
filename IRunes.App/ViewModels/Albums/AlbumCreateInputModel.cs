@@ -2,7 +2,7 @@
 
 namespace IRunes.App.ViewModels.Albums
 {
-    public class CreateInputModel
+    public class AlbumCreateInputModel
     {
         [Required]
         [StringLength(4, 20, "The Name length should be between 4 and 20 characters.")]

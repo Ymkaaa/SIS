@@ -21,21 +21,21 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult All()
+        public IActionResult All()
         {
             ICollection<Album> albums = albumService.GetAllAlbums();
             return this.View(albums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
         }
 
         [Authorize]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return this.View();
         }
 
         [Authorize]
         [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm(CreateInputModel model)
+        public IActionResult CreateConfirm(AlbumCreateInputModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Details(DetailsInputModel model)
+        public IActionResult Details(AlbumDetailsInputModel model)
         {
             Album albumFromDb = albumService.GetAlbumById(model.Id);
 

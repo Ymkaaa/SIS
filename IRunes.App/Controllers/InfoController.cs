@@ -5,7 +5,7 @@ namespace IRunes.App.Controllers
 {
     public class InfoController : Controller
     {
-        public ActionResult About()
+        public IActionResult About()
         {
             return this.View();
         }

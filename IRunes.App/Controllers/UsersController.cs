@@ -25,13 +25,13 @@ namespace IRunes.App.Controllers
                 return Encoding.UTF8.GetString(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
             }
         }
-        public ActionResult Login()
+        public IActionResult Login()
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Login")]
-        public ActionResult LoginConfirm(LoginInputModel model)
+        public IActionResult LoginConfirm(UserLoginInputModel model)
         {
             User userFromDb = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
@@ -45,13 +45,13 @@ namespace IRunes.App.Controllers
             return this.Redirect("/");
         }
 
-        public ActionResult Register()
+        public IActionResult Register()
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Register")]
-        public ActionResult RegisterConfirm(RegisterInputModel model)
+        public ActionResult RegisterConfirm(UserRegisterInputModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace IRunes.App.Controllers
             return this.Redirect("/Users/Login");
         }
 
-        public ActionResult Logout()
+        public IActionResult Logout()
         {
             this.SignOut();
 
