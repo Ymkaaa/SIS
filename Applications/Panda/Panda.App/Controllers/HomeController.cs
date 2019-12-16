@@ -14,6 +14,11 @@ namespace Panda.App.Controllers
 
         public IActionResult Index()
         {
+            if (this.IsLoggedIn())
+            {
+                return this.View("IndexLoggedIn");
+            }
+
             return this.View();
         }
     }

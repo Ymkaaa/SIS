@@ -13,8 +13,8 @@ namespace Panda.Data.Models
         [Key]
         public string Id { get; set; }
 
-        [MaxLength(20)]
         [Required]
+        [MaxLength(20)]
         public string Description { get; set; }
         
         public decimal Weight { get; set; }

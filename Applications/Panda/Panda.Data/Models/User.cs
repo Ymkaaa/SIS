@@ -16,12 +16,12 @@ namespace Panda.Data.Models
         [Key]
         public string Id { get; set; }
 
-        [MaxLength(20)]
         [Required]
+        [MaxLength(20)]
         public string Username { get; set; }
 
-        [MaxLength(20)]
         [Required]
+        [MaxLength(20)]
         public string Email { get; set; }
 
         [Required]
