@@ -18,6 +18,8 @@ namespace Panda.App
         public void ConfigureServices(SIS.MvcFramework.DependencyContainer.IServiceProvider serviceProvider)
         {
             serviceProvider.Add<IUsersService, UsersService>();
+            serviceProvider.Add<IPackagesService, PackagesService>();
+            serviceProvider.Add<IReceiptsService, ReceiptsService>();
         }
     }
 }

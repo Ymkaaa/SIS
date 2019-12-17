@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Panda.Data.Models
+namespace Panda.Models
 {
     public class User
     {

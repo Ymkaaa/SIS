@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using IRunes.Data;
+﻿using IRunes.Data;
 using IRunes.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IRunes.Services
 {

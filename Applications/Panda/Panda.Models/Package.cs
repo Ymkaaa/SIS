@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Panda.Data.Models
+namespace Panda.Models
 {
     public class Package
     {

@@ -6,7 +6,7 @@ using SIS.MvcFramework.Routing.Contracts;
 
 namespace IRunes.App
 {
-    public class Startup : IMvcApplication
+    public class StartUp : IMvcApplication
     {
         public void Configure(IServerRoutingTable serverRoutingTable)
         {

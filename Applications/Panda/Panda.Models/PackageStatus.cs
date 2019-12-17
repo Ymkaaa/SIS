@@ -1,4 +1,4 @@
-﻿namespace Panda.Data.Models
+﻿namespace Panda.Models
 {
     public enum PackageStatus
     {

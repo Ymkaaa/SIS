@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Panda.Data.Models;
+using Panda.Models;
 
 namespace Panda.Data
 {

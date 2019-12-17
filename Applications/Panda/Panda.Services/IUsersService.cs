@@ -1,4 +1,5 @@
-﻿using Panda.Data.Models;
+﻿using Panda.Models;
+using System.Collections.Generic;
 
 namespace Panda.Services
 {
@@ -7,5 +8,7 @@ namespace Panda.Services
         string CreateUser(string username, string email, string password);
 
         User GetUserOrNull(string username, string password);
+
+        IEnumerable<string> GetUsernames();
     }
 }

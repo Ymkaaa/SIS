@@ -1,5 +1,5 @@
 ﻿using Panda.App.ViewModels.Users;
-using Panda.Data.Models;
+using Panda.Models;
 using Panda.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
