@@ -34,15 +34,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.Data", "Applications\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{B6B2E87E-1AE3-404F-802B-E09B9BECB8BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.App", "Applications\IRunes\IRunes.App\IRunes.App.csproj", "{0D91631D-37F5-4624-B5A0-5B8B5B5578BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.App", "Applications\IRunes\IRunes.App\IRunes.App.csproj", "{0D91631D-37F5-4624-B5A0-5B8B5B5578BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.Data", "Applications\IRunes\IRunes.Data\IRunes.Data.csproj", "{1FDB4914-B8F4-44AC-B559-27CEB57E97A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Data", "Applications\IRunes\IRunes.Data\IRunes.Data.csproj", "{1FDB4914-B8F4-44AC-B559-27CEB57E97A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.Services", "Applications\IRunes\IRunes.Services\IRunes.Services.csproj", "{CF94D702-4DA7-431A-9E05-E7CBF619D06D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Services", "Applications\IRunes\IRunes.Services\IRunes.Services.csproj", "{CF94D702-4DA7-431A-9E05-E7CBF619D06D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.Models", "Applications\IRunes\IRunes.Models\IRunes.Models.csproj", "{E9C7F94C-977E-4CE7-868F-D96A29DDDD2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Models", "Applications\IRunes\IRunes.Models\IRunes.Models.csproj", "{E9C7F94C-977E-4CE7-868F-D96A29DDDD2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Models", "Applications\Panda\Panda.Models\Panda.Models.csproj", "{8A493213-0D8A-4B5D-8A5A-22CE405938F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.Models", "Applications\Panda\Panda.Models\Panda.Models.csproj", "{8A493213-0D8A-4B5D-8A5A-22CE405938F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Musaca", "Musaca", "{D6632A1F-773A-4228-A3D2-FC33C36A2EE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musaca.App", "Applications\Musaca\Musaca.App\Musaca.App.csproj", "{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musaca.Data", "Applications\Musaca\Musaca.Data\Musaca.Data.csproj", "{59FAA007-5C1A-41CF-B183-A638AA7EADE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musaca.Models", "Applications\Musaca\Musaca.Models\Musaca.Models.csproj", "{4717435C-1674-4A64-8648-E0305DB103D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musaca.Services", "Applications\Musaca\Musaca.Services\Musaca.Services.csproj", "{FC56C868-890B-4402-B84B-7D79777FDAD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +108,22 @@ Global
 		{8A493213-0D8A-4B5D-8A5A-22CE405938F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A493213-0D8A-4B5D-8A5A-22CE405938F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A493213-0D8A-4B5D-8A5A-22CE405938F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59FAA007-5C1A-41CF-B183-A638AA7EADE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59FAA007-5C1A-41CF-B183-A638AA7EADE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59FAA007-5C1A-41CF-B183-A638AA7EADE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59FAA007-5C1A-41CF-B183-A638AA7EADE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4717435C-1674-4A64-8648-E0305DB103D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4717435C-1674-4A64-8648-E0305DB103D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4717435C-1674-4A64-8648-E0305DB103D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4717435C-1674-4A64-8648-E0305DB103D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC56C868-890B-4402-B84B-7D79777FDAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC56C868-890B-4402-B84B-7D79777FDAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC56C868-890B-4402-B84B-7D79777FDAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC56C868-890B-4402-B84B-7D79777FDAD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +139,11 @@ Global
 		{CF94D702-4DA7-431A-9E05-E7CBF619D06D} = {B6B2E87E-1AE3-404F-802B-E09B9BECB8BB}
 		{E9C7F94C-977E-4CE7-868F-D96A29DDDD2E} = {B6B2E87E-1AE3-404F-802B-E09B9BECB8BB}
 		{8A493213-0D8A-4B5D-8A5A-22CE405938F3} = {65BBF2A6-9D04-4670-B01E-6336C6CC875C}
+		{D6632A1F-773A-4228-A3D2-FC33C36A2EE0} = {3DA7EA74-386B-40A5-AA92-7E2FDC639C34}
+		{78CB9DB7-86F2-4D89-BEEE-3D6B6926236E} = {D6632A1F-773A-4228-A3D2-FC33C36A2EE0}
+		{59FAA007-5C1A-41CF-B183-A638AA7EADE6} = {D6632A1F-773A-4228-A3D2-FC33C36A2EE0}
+		{4717435C-1674-4A64-8648-E0305DB103D2} = {D6632A1F-773A-4228-A3D2-FC33C36A2EE0}
+		{FC56C868-890B-4402-B84B-7D79777FDAD0} = {D6632A1F-773A-4228-A3D2-FC33C36A2EE0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {95749778-C448-4913-B813-04C78D964222}

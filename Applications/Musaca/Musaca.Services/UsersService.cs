@@ -1,25 +1,18 @@
-﻿using Panda.Data;
-using Panda.Models;
-using System.Collections.Generic;
+﻿using Musaca.Data;
+using Musaca.Models;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Panda.Services
+namespace Musaca.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly PandaDbContext context;
+        private readonly MusacaDbContext context;
 
-        public UsersService(PandaDbContext context)
+        public UsersService(MusacaDbContext context)
         {
             this.context = context;
-        }
-
-
-        public IEnumerable<string> GetUsernames()
-        {
-            return this.context.Users.Select(u => u.Username).ToList();
         }
 
         public User GetUserOrNull(string username, string password)
@@ -33,7 +26,7 @@ namespace Panda.Services
             {
                 Username = username,
                 Email = email,
-                Password = HashPassword(password)
+                Password = this.HashPassword(password)
             };
 
             this.context.Add(user);

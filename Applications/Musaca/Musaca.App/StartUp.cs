@@ -1,16 +1,16 @@
-﻿using Panda.Data;
-using Panda.Services;
+﻿using Musaca.Data;
+using Musaca.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.DependencyContainer;
 using SIS.MvcFramework.Routing.Contracts;
 
-namespace Panda.App
+namespace Musaca.App
 {
     public class StartUp : IMvcApplication
     {
         public void Configure(IServerRoutingTable serverRoutingTable)
         {
-            using (PandaDbContext context = new PandaDbContext())
+            using (MusacaDbContext context = new MusacaDbContext())
             {
                 context.Database.EnsureCreated();
             }
@@ -19,8 +19,8 @@ namespace Panda.App
         public void ConfigureServices(IServiceProvider serviceProvider)
         {
             serviceProvider.Add<IUsersService, UsersService>();
-            serviceProvider.Add<IPackagesService, PackagesService>();
-            serviceProvider.Add<IReceiptsService, ReceiptsService>();
+            serviceProvider.Add<IProductsService, ProductsService>();
+            serviceProvider.Add<IOrdersService, OrdersService>();
         }
     }
 }
